@@ -10,7 +10,7 @@
 
 //api set up data
 var apis = {
-	nyt:{
+/*	nyt:{
 		source:'The New York Times',
 		returnResult:'results',
 		apikey:'3a2be41461714996a25b6f9a46daa606',
@@ -31,7 +31,7 @@ var apis = {
 			abrev:'abstract',
 			impressions:'',
 		}
-	},
+	},*/
 	guardian:{
 		source:'The Guardian',
 		returnResult:'response.results',
@@ -78,17 +78,25 @@ function loopThroughApis(apis){
 		var request = new XMLHttpRequest();
 		var aliases = apis[api].translate;
 		request.addEventListener('load', function(){
-			//console.log('ddtest011a', JSON.parse(this.responseText));
 			var myData = JSON.parse(request.response);
 			//loop through results and push values to articles array
-			for(res in myData.results){
+			var resultsA = eval('myData.'+apis[api].returnResult);
+			for(res in resultsA){
+console.log('ddtest011b resultsA['+res+']', resultsA[res]);
+//console.log('ddtest011b', myData.results[res]);
 				var temp = {};
 				//loop through aliases and load result values into object to pass into articles array
 				for(alias in aliases){
+console.log('ddtest011c', alias);
 					//add value and key to object to be passed to articles
 					if(alias == 'thumb'){
 						temp[alias] = eval('myData.results[res].'+aliases[alias]);
 					}else{
+console.log(myData);
+console.log(myData.results);
+console.log(res);
+console.log(myData.results[res]);
+console.log(aliases[alias]);
 						temp[alias] = myData.results[res][aliases[alias]];
 					}
 					if(alias == 'impressions'){
@@ -97,34 +105,33 @@ function loopThroughApis(apis){
 						}
 					}
 				}
-				//console.log('temp', temp);
 				//add value and key object to articles array
-//console.log('temp', temp);
+console.log('temp', temp);
 				articles.push(temp);
 			}
-//console.log('articles!!!!!!', articles);
+console.log('articles!!!!!!', articles);
 
 	//update the source menu options
-//console.log('ddtest303');
+console.log('ddtest303');
 			$('#sources').html(source_menu);
-//console.log('ddtest304');
+console.log('ddtest304');
 			populateArticles(articles, apis[api].subthumb, apis[api].defaultthumb);
-//console.log('ddtest305');
+console.log('ddtest305');
 		});
 
-//console.log('ddtest300');
+console.log('ddtest300');
 		request.open('GET', requestURL);
-//console.log('ddtest301');
+console.log('ddtest301');
 		request.send();
-//console.log('ddtest302');
+console.log('ddtest302');
 	}
 }
 
 function populateArticles(articles, subthumb, defaultthumb){
-//console.log('ddtestAA');
+console.log('ddtestAA');
 	var html_result = '';
 	for(i = 0; i < articles.length; ++i){
-//console.log('ddtestAB', articles[i]);
+console.log('ddtestAB', articles[i]);
 /*console.log('THUMB01!', articles[i].thumb);
 console.log('THUMB02!', eval(articles[i].thumb));
 console.log('THUMB03!', eval(articles[i].thumb+'[0].url'));
@@ -133,10 +140,10 @@ console.log('THUMB04!', eval('articles[i].thumb'+subthumb));*/
 //console.log('articles[i].thumb'+subthumb);
 //console.log(eval('articles[i].thumb'+subthumb));
 		var thumb_url = (subthumb != '') ? eval('articles[i].thumb'+subthumb) : articles[i].thumb;
-//console.log('ddtest thumb1', thumb_url);
+console.log('ddtest thumb1', thumb_url);
 		if(thumb_url == ''){
 			thumb_url == defaultthumb;
-//console.log('ddtest thumb2', thumb_url);
+console.log('ddtest thumb2', thumb_url);
 		}
 //		var thumb = 
 		html_result += '<article class="article">';
@@ -153,7 +160,7 @@ console.log('THUMB04!', eval('articles[i].thumb'+subthumb));*/
 		html_result +=  '<div class="clearfix"></div>';
 		html_result += '</article>';
 	}
-//console.log('html_result!!!', html_result);
+console.log('html_result!!!', html_result);
 	$('#main').html(html_result);
 }
 
