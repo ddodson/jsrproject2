@@ -59,7 +59,8 @@
 
 /* Header styles */
 header {
-  background-color: #FE052C;
+/*  background-color: #FE052C;*/
+  background-color: #000000;
   position: fixed;
   top: 0;
   left: 0;
@@ -70,7 +71,7 @@ header h1 {
   color: #FFF;
   padding: 10px 2%;
   margin: 0;
-  width: 16%;
+  width: 65%;
   float: left;
   padding-left: 0;
 }
@@ -78,7 +79,7 @@ header h1 {
 /* Header navigation bar */
 header nav {
   padding: 10px 2%;
-  width: 76%;
+  width: 26%;
   float: right;
   text-align: right;
   line-height: 30px;
