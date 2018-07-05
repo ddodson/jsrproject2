@@ -10,26 +10,6 @@
 
 //api set up data
 var apis = {
-	guardian:{
-		source:'The Guardian',
-		returnResult:'response.results',
-		apikey:'cab434ec-44d1-4d51-a16e-d7c116819d03',
-		url:'https://content.guardianapis.com/search?api-key=cab434ec-44d1-4d51-a16e-d7c116819d03',
-		subthumb:'',
-		defaultthumb:'https://i.vimeocdn.com/portrait/23154888_300x300',
-		translate:{
-			pk:'id',
-			type:'type',
-			section1:'sectionId',
-			section2:'sectionName',
-			date:'webPublicationDate',
-			title:'webTitle',
-			author:'',
-			url:'webUrl',
-			thumb:'',
-			abrev:'',
-		}
-	},
 	nyt:{
 		source:'The New York Times',
 		returnResult:'results',
@@ -49,22 +29,56 @@ var apis = {
 			thumb:'media[0][\'media-metadata\'][0].url',
 			thumb_alt:'media[0].caption',
 			abrev:'abstract',
+			impressions:'',
+		}
+	},
+	guardian:{
+		source:'The Guardian',
+		returnResult:'response.results',
+		apikey:'cab434ec-44d1-4d51-a16e-d7c116819d03',
+		url:'https://content.guardianapis.com/search?api-key=cab434ec-44d1-4d51-a16e-d7c116819d03',
+		subthumb:'',
+		defaultthumb:'https://i.vimeocdn.com/portrait/23154888_300x300',
+		translate:{
+			pk:'id',
+			type:'type',
+			section1:'sectionId',
+			section2:'sectionName',
+			date:'webPublicationDate',
+			title:'webTitle',
+			author:'',
+			url:'webUrl',
+			thumb:'',
+			abrev:'',
+			impressions:'',
 		}
 	},
 };
 
 var articles = [];
-var source_menu = '<li><a href="#all">All</a></li>';
+var source_menu = '<li><a class="newssource" href="#all">All</a></li>';
 var request = new XMLHttpRequest();
+
+//$('#sources > li:nth-child(2) > a').click(function() {
+//$('#sources > li:nth-child(2)').click(function() { //doesn't work
+//$('#sources > li').click(function() { //doesn't work
+//$('#sources li').click(function() { //doesn't work
+//$('#sources').click(function() { //works
+//document.getElementById("sources").addEventListener("click", alert('displayDate'));
+
+/*$("a").click(function() {
+  alert("Handler for .click() called.");
+  console.log(this);
+});*/
 
 function loopThroughApis(apis){
 	for(api in apis){
-		source_menu += '<li><a href="#'+api+'">'+apis[api].source+'</a></li>'
+		source_menu += '<li><a class="newssource" href="#'+api+'">'+apis[api].source+'</a></li>'
 		var requestURL = apis[api].url;
 		var request = new XMLHttpRequest();
 		var aliases = apis[api].translate;
 		request.addEventListener('load', function(){
-			console.log('ddtest011a', JSON.parse(this.responseText));
+			//console.log('ddtest011a', JSON.parse(this.responseText));
 			var myData = JSON.parse(request.response);
 			//loop through results and push values to articles array
 			for(res in myData.results){
@@ -72,10 +86,20 @@ function loopThroughApis(apis){
 				//loop through aliases and load result values into object to pass into articles array
 				for(alias in aliases){
 					//add value and key to object to be passed to articles
-					temp[alias] = myData.results[res][aliases[alias]];
+					if(alias == 'thumb'){
+						temp[alias] = eval('myData.results[res].'+aliases[alias]);
+					}else{
+						temp[alias] = myData.results[res][aliases[alias]];
+					}
+					if(alias == 'impressions'){
+						if(aliases[alias] == ''){
+							temp[alias] = '';
+						}
+					}
 				}
-				console.log('temp', temp);
+				//console.log('temp', temp);
 				//add value and key object to articles array
+//console.log('temp', temp);
 				articles.push(temp);
 			}
 //console.log('articles!!!!!!', articles);
@@ -97,22 +121,22 @@ function loopThroughApis(apis){
 }
 
 function populateArticles(articles, subthumb, defaultthumb){
-console.log('ddtestAA');
+//console.log('ddtestAA');
 	var html_result = '';
 	for(i = 0; i < articles.length; ++i){
-console.log('ddtestAB', articles[i]);
+//console.log('ddtestAB', articles[i]);
 /*console.log('THUMB01!', articles[i].thumb);
 console.log('THUMB02!', eval(articles[i].thumb));
 console.log('THUMB03!', eval(articles[i].thumb+'[0].url'));
 console.log('THUMB04 - ', eval(articles[i].thumb+'[0]'))
 console.log('THUMB04!', eval('articles[i].thumb'+subthumb));*/
-console.log('articles[i].thumb'+subthumb);
-console.log(eval('articles[i].thumb'+subthumb));
+//console.log('articles[i].thumb'+subthumb);
+//console.log(eval('articles[i].thumb'+subthumb));
 		var thumb_url = (subthumb != '') ? eval('articles[i].thumb'+subthumb) : articles[i].thumb;
-console.log('ddtest thumb1', thumb_url);
+//console.log('ddtest thumb1', thumb_url);
 		if(thumb_url == ''){
 			thumb_url == defaultthumb;
-console.log('ddtest thumb2', thumb_url);
+//console.log('ddtest thumb2', thumb_url);
 		}
 //		var thumb = 
 		html_result += '<article class="article">';
@@ -125,11 +149,11 @@ console.log('ddtest thumb2', thumb_url);
 		html_result +=          (articles[i].section2 != undefined ? articles[i].section2 : '');
 		html_result +=          ': '+articles[i].abrev+'</h6>';
 		html_result +=  '</section>';
-		html_result +=  '<section class="impressions">526</section>';
+		html_result +=  '<section class="impressions">'+articles[i].impressions+'</section>';
 		html_result +=  '<div class="clearfix"></div>';
 		html_result += '</article>';
 	}
-console.log('html_result!!!', html_result);
+//console.log('html_result!!!', html_result);
 	$('#main').html(html_result);
 }
 
