@@ -76,8 +76,6 @@ $('#sources').on("click", "li", function() {
 
 
 function parseApi(api){
-console.log('api',api);
-console.log('api.url',api.url);
   var requestURL = api.url;
   var request = new XMLHttpRequest();
   var aliases = api.translate;
@@ -110,7 +108,6 @@ console.log('api.url',api.url);
   });
 
   request.open('GET', requestURL);
-//console.log('requestURL',requestURL);
   request.send();
 }
 
@@ -152,7 +149,6 @@ function populateArticles(articles, subthumb, defaultthumb){
     $('#popUp').removeClass("loader hidden");
   });
   $('#closePopUp').bind("click", function() {
-    console.log('close this...');
     $('#popUp').addClass("loader hidden");
   });
 }
