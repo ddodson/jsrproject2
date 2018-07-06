@@ -1,144 +1,112 @@
-/*
-  Please add all Javascript code to this file.
-*/
+<!doctype html>
+<html class="no-js" lang="">
 
-//api set up data
-var apis = {
-	nyt:{
-		source:'The New York Times',
-		returnResult:'results',
-		apikey:'3a2be41461714996a25b6f9a46daa606',
-		url:'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/7.json?api-key=3a2be41461714996a25b6f9a46daa606',
-		subthumb:'',
-		defaultthumb:'http://www.eatdimestore.com/wp-content/uploads/2017/05/new-york-times-logo.jpg',
-		translate:{
-			pk:'url',
-			type:'type',
-			section1:'section',
-			section2:'type',
-			date:'published_date',
-			title:'title',
-			author:'byline',
-			url:'url',
-			thumb:'media[0][\'media-metadata\'][0].url',
-			thumb_alt:'media[0].caption',
-			abrev:'abstract',
-			impressions:'',
-		}
-	},
-	guardian:{
-		source:'The Guardian',
-		returnResult:'response.results',
-		apikey:'cab434ec-44d1-4d51-a16e-d7c116819d03',
-		url:'https://content.guardianapis.com/search?api-key=cab434ec-44d1-4d51-a16e-d7c116819d03',
-		subthumb:'',
-		defaultthumb:'https://i.vimeocdn.com/portrait/23154888_300x300',
-		translate:{
-			pk:'id',
-			type:'type',
-			section1:'sectionId',
-			section2:'sectionName',
-			date:'webPublicationDate',
-			title:'webTitle',
-			author:'',
-			url:'webUrl',
-			thumb:'',
-			abrev:'',
-			impressions:'',
-		}
-	},
-};
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <title>Feedr @ GA</title>
+      <link rel="stylesheet" href="styles/normalize.css" media="screen" charset="utf-8">
+      <link rel="stylesheet" href="styles/html5bp.css" media="screen" charset="utf-8">
+      <link rel="stylesheet" href="styles/style.css" media="screen" charset="utf-8">
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
 
-var articles = [];
-var source_menu = '<li><a class="newssource" href="#all">All</a></li>';
-var request = new XMLHttpRequest();
-var html_result = '';
+    </head>
 
-$('#sources').html('');
-for(api in apis){
-	parseApi(apis[api]);
-	source_menu += '<li><a class="newssource" href="#" id="api_'+api+'">'+apis[api].source+'</a></li>'
-	$('#sources').html(source_menu);
-}
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
 
-$('#sources').on("click", "li", function() {
-	console.log($(event.target).attr('id'));
-	parseApi(apis[api]);
-});
+        <header>
+          <section class="container">
+            <a href="#"><h1 id='page_title'>BLACK and WHITE and READ all over</h1></a>
+            <nav>
+              <ul>
+                <li><a href="#">News Source: <span>Source Name</span></a>
+                  <ul id='sources'>
+                      <li><a href="#">Source 1</a></li>
+                      <li><a href="#">Source 2</a></li>
+                      <li><a href="#">Source 3</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <section id="search">
+                <input type="text" name="name" value="">
+                <a href="#"><img src="images/search.png" alt="" /></a>
+              </section>
+            </nav>
+            <div class="clearfix"></div>
+          </section>
+        </header>
+        <div id="popUp" class="loader hidden">
+          <a href="#" class="closePopUp">X</a>
+          <div class="container">
+            <h1>Article title here</h1>
+            <p>
+              Article description/content here.
+            </p>
+            <a href="#" class="popUpAction" target="_blank">Read more from source</a>
+          </div>
+        </div>
+        <section id="main" class="container">
+          <article class="article">
+            <section class="featuredImage">
+              <img src="images/article_placeholder_1.jpg" alt="" />
+            </section>
+            <section class="articleContent">
+                <a href="#"><h3>Test article title</h3></a>
+                <h6>Lifestyle</h6>
+            </section>
+            <section class="impressions">
+              526
+            </section>
+            <div class="clearfix"></div>
+          </article>
+          <article class="article">
+            <section class="featuredImage">
+              <img src="images/article_placeholder_2.jpg" alt="" />
+            </section>
+            <section class="articleContent">
+                <a href="#"><h3>Test article title</h3></a>
+                <h6>Lifestyle</h6>
+            </section>
+            <section class="impressions">
+              526
+            </section>
+            <div class="clearfix"></div>
+          </article>
+          <article class="article">
+            <section class="featuredImage">
+              <img src="images/article_placeholder_2.jpg" alt="" />
+            </section>
+            <section class="articleContent">
+                <a href="#"><h3>Test article title</h3></a>
+                <h6>Lifestyle</h6>
+            </section>
+            <section class="impressions">
+              526
+            </section>
+            <div class="clearfix"></div>
+          </article>
+          <article class="article">
+            <section class="featuredImage">
+              <img src="images/article_placeholder_1.jpg" alt="" />
+            </section>
+            <section class="articleContent">
+                <a href="#"><h3>Test article title</h3></a>
+                <h6>Lifestyle</h6>
+            </section>
+            <section class="impressions">
+              526
+            </section>
+            <div class="clearfix"></div>
+          </article>
+        </section>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')</script>
+        <script src="js/app.js"></script>
 
-function parseApi(api){
-console.log('api',api);
-console.log('api.url',api.url);
-	var requestURL = api.url;
-	var request = new XMLHttpRequest();
-	var aliases = api.translate;
-	request.addEventListener('load', function(){
-		var myData = JSON.parse(request.response);
-		//loop through results and push values to articles array
-		var resultsA = eval('myData.'+api.returnResult);
-		for(res in resultsA){
-console.log('resultsA[res]', resultsA[res]);
-
-/*
-
-			$('#api_'+api).bind( "click", function() {
-				parseApi(api);
-			});
- */
-			var temp = {};
-			//loop through aliases and load result values into object to pass into articles array
-			for(alias in aliases){
-				//add value and key to object to be passed to articles
-				if(aliases[alias] == ''){
-					if(alias == 'thumb'){
-						temp[alias] = api['defaultthumb'];
-					}else{
-						temp[alias] = '';
-					}
-				}else if(alias == 'thumb'){
-					temp[alias] = eval('myData.results[res].'+aliases[alias]);
-				}else{
-					temp[alias] = eval('myData.'+api.returnResult+'[res].'+aliases[alias]);
-				}
-			}
-			//add value and key object to articles array
-			articles.push(temp);
-		}
-
-		populateArticles(articles, api.subthumb, api.defaultthumb);
-	});
-
-	request.open('GET', requestURL);
-console.log('requestURL',requestURL);
-	request.send();
-}
-
-function populateArticles(articles, subthumb, defaultthumb){
-	for(i = 0; i < articles.length; ++i){
-		var thumb_url = (subthumb != '') ? eval('articles[i].thumb'+subthumb) : articles[i].thumb;
-		if(thumb_url == ''){
-			thumb_url == defaultthumb;
-		}
-		html_result += '<article class="article">';
-		html_result +=   '<section class="featuredImage">';
-		html_result +=     '<img src="'+thumb_url+'" alt="'+articles[i].title+'">';
-		html_result +=   '</section>';
-		html_result +=   '<section class="articleContent">';
-		html_result +=     '<a href="#"><h3>'+articles[i].title+'</h3></a>';
-		html_result +=     '<h6>'+(articles[i].section1 != undefined ? (articles[i].section1+' ') : '');
-		html_result +=            (articles[i].section2 != undefined ? articles[i].section2 : '');
-		html_result +=            ': '+articles[i].abrev+'</h6>';
-		html_result +=   '</section>';
-		html_result +=   '<section class="impressions">'+articles[i].impressions+'</section>';
-		html_result +=   '<div class="clearfix"></div>';
-		html_result += '</article>';
-	}
-	$('#main').html(html_result);
-	$('.article').bind( "click", function() {
-		console.log('this is...');
-		console.log(this);
-		$('#popUp').show();
-	});
-}
-////.fields.thumbnail
+    </body>
+</html>
